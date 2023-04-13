@@ -113,13 +113,67 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-
+        board.setViewingPerspective(side);
+        boolean merged = tileDueToMerge();
+        boolean moved = tileDueToSpace();  //注意这里要先调用tileDueToMerge()，再调用tileDueToSpace()。因为合并之后的tile可能会有空格需要再移动，比如[2, 2,2,2]合并后变为[4,0,4,0]需要再移动变为[4,4,0,0]
+        changed = merged || moved;
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
     }
+    /** 判断是否会由于empty space而倾斜 并做出相关的移动  空格只出现在第一行是不会有移动的（up），空格必须在上面几行*/
+    public boolean tileDueToSpace(){
+        boolean moved = false;
+        for (int col = 0; col < board.size(); col += 1) {
+            for (int row = board.size() - 1; row >= 0; row -= 1) {
+                Tile t1 = board.tile(col, row);
+                if (t1 == null) {
+                    for (int row2 = row - 1; row2 >= 0; row2 -= 1) {
+                        Tile t2 = board.tile(col, row2);
+                        if (t2 != null) {
+                            board.move(col, row, t2);
+                            moved = true;
+                            break;   //切记移动一个tile到空得地方，要结束内层循环，再寻找下一个空的地方
+                        }
+                    }
+                }
+            }
+        }
+        return moved;
+    }
+
+    /** 判断是否会因为merge而倾斜,并做出相关合并*/
+
+    public boolean tileDueToMerge(){
+        boolean merged = false;
+        for(int col = 0; col< board.size(); col++){
+            for (int row = board.size()-1; row>=0; row--){
+                Tile t1 = board.tile(col, row);
+                if (t1 != null){
+                    for (int row2 = row-1; row2>=0; row2--){
+                        Tile t2 = board.tile(col, row2);
+                        if (t2 != null){
+                            if(t1.value() == t2.value()){
+                                board.move(col, row, t2);
+                                merged = true;
+                                score += board.tile(col, row).value();
+                                row = row2; //为了合并之后能够下移两个单位，然后再比较相邻的两个tile，不将row赋值为row2的话，相当于只下移了一次。
+                            }
+                            break;
+                        }
+
+                    }
+                }
+
+            }
+        }
+        return merged;
+
+    }
+
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
@@ -138,7 +192,16 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                if (b.tile(i, j) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
+
+
     }
 
     /**
@@ -148,7 +211,19 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        for (int i=0; i < b.size();  i++) {
+            for (int j = 0; j < b.size(); j++) {
+                if (b.tile(i, j) == null) {
+
+                } else {
+                    if ((b.tile(i, j).value() == MAX_PIECE)) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
+
     }
 
     /**
@@ -157,9 +232,55 @@ public class Model extends Observable {
      * 1. There is at least one empty space on the board.
      * 2. There are two adjacent tiles with the same value.
      */
+//    public static boolean atLeastOneMoveExists(Board b) {
+//        // TODO: Fill in this function.
+//
+//        return emptySpaceExists(b) || mergeableBoard(b);
+//    }
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if (emptySpaceExists(b)) {
+            return true;
+        }else {
+            for (int col = 0; col < b.size(); col++) {
+                for (int row = 0; row < b.size() - 1; row++) {
+                    if(b.tile(col, row).value()==b.tile(col, row+1).value()){  //列固定，比较相邻两行
+                        return true;
+                    }
+                    if(b.tile(row, col).value()==b.tile(row+1, col).value()){   //行固定，比较上下两列
+                        return true;
+                    }
+                }
+            }
+
+        }
         return false;
+
+    }
+
+        /** 判断board是否可以合并*/
+    public static boolean mergeableBoard(Board b){
+        for (int col=0; col< b.size(); col++){
+            for (int row=0; row< b.size()-1; row++){
+                if(mergeableTile(b.tile(col, row), b.tile(col, row+1))){
+                    return true;
+                }
+            }
+        }
+        b.setViewingPerspective(Side.EAST); //以东为视角判断相邻的tile能否合并
+        for (int col=0; col< b.size(); col++){
+            for (int row=0; row< b.size()-1; row++){
+                if(mergeableTile(b.tile(col, row), b.tile(col, row+1))){
+                    return true;
+                }
+            }
+        }
+        b.setViewingPerspective(Side.NORTH);
+        return false;
+    }
+    /**判断两个tile能否合并*/
+    public static boolean mergeableTile(Tile tile1, Tile tile2){
+        return tile1 != null && tile2 != null && tile1.value() == tile2.value();
     }
 
 
