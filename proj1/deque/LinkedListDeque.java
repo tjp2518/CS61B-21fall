@@ -1,0 +1,243 @@
+package deque;
+
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Iterable<T> {
+
+    /* Implementing recursive linked list nodes */
+    private  class LLNode {
+        public T item;
+        public LLNode prev;
+        public LLNode next;
+
+        public LLNode(LLNode node1, T i, LLNode node2) {
+            item = i;
+            prev = node1;
+            next = node2;
+        }
+    }
+
+    /* */
+    private class LinkListDequeIterator implements Iterator<T> {
+
+        int position;
+        public LinkListDequeIterator(){
+            position = 0;
+        }
+        @Override
+        public boolean hasNext() {
+            return position < size;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = get(position);
+            position += 1;
+            return returnItem;
+        }
+    }
+
+    private LLNode sentinel;
+    private int size;
+
+    public LinkedListDeque() {
+        sentinel = new LLNode(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
+        size = 0;
+    }
+
+
+
+    /*Adds an item of type T to the front of the deque. You can assume that item is never null.*/
+    public void addFirst(T item) {
+        LLNode tempNode = sentinel.next; // temp node to save previously created LLnode instance
+        LLNode newNode = new LLNode(sentinel, item, tempNode);  //The front pointer of the new node points to the sentinel node
+        // and the back pointer points to the previously created LLnode
+        tempNode.prev = newNode;
+        sentinel.next = newNode;
+        size += 1;
+    }
+
+    /*Adds an item of type T to the back of the deque. You can assume that item is never null.*/
+    public void addLast(T item) {
+        LLNode tempNode = sentinel.prev; // temp node to save the last node
+        LLNode newNode = new LLNode(tempNode, item, sentinel);
+        tempNode.next = newNode;
+        sentinel.prev = newNode;
+        size += 1;
+    }
+
+    /*Returns true if deque is empty, false otherwise.*/
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /*Returns the number of items in the deque.*/
+    public int size() {
+        return size;
+    }
+
+
+    /*Prints the items in the deque from first to last, separated by a space.
+     Once all the items have been printed, print out a new line.*/
+    public void printDeque() {
+        int i = 0;
+        LLNode temp = sentinel.next;
+        while (i < size){
+            System.out.print(temp.item.toString() + " ");
+            i += 1;
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+
+    /*Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    public T removeFirst() {
+        if (size == 0){
+            return null;
+        }
+        LLNode removeNode = this.sentinel.next;
+        this.sentinel.next = this.sentinel.next.next;
+        removeNode.next.prev = this.sentinel;
+        removeNode.prev = null;
+        removeNode.next = null;
+        size -= 1;
+        return removeNode.item;
+    }
+
+    /*Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    public T removeLast() {
+        if (size == 0){
+            return null;
+        }
+        LLNode removeNode = this.sentinel.prev;
+        this.sentinel.prev = removeNode.prev;
+        removeNode.prev.next = sentinel;
+        removeNode.next = null;
+        removeNode.prev = null;
+        size -= 1;
+        return removeNode.item;
+    }
+
+
+
+
+    /*Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+    If no such item exists, returns null. Must not alter the deque!*/
+    /* must use iteration */
+    public T get(int index) {
+        if (index >= size || index < 0){
+            return null;
+        }
+        int i = 0;
+        LLNode temp = this.sentinel.next;
+        while(i != index){
+            temp = temp.next;
+            i += 1;
+        }
+        return temp.item;
+    }
+
+
+    public T getRecursive(int index) {
+        if (index >= size || index < 0){
+            return null;
+        }
+        return getRecursive(index, this.sentinel.next);
+    }
+
+    /*通过构造辅助函数实现递归的方法*/
+    public T getRecursive(int index, LLNode temp){
+        if (index == 0){
+            return temp.item;
+        }else{
+            return getRecursive(index - 1, temp.next);
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkListDequeIterator();
+    }
+
+
+
+
+    /*Returns whether the parameter o is equal to the Deque.
+    o is considered equal if it is a Deque and if it contains the same contents
+    (as governed by the generic T’s equals method) in the same order
+    */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null){
+            return false;
+        }
+        if (!(o instanceof LinkedListDeque)){
+            return false;
+        }
+        LinkedListDeque<T> temp = (LinkedListDeque<T>)o;
+        if(temp.size() != this.size()){
+            return false;
+        }
+        for(int i=0; i < temp.size(); i++){
+            if (! this.get(i).equals(temp.get(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public static void main(String[] args){
+        LinkedListDeque<Integer> deque1 = new LinkedListDeque<>();
+        deque1.addFirst(18);
+        deque1.addFirst(19);
+        deque1.addFirst(20);
+        deque1.addLast(17);
+        deque1.addLast(16);
+        deque1.addLast(15);
+        System.out.println(deque1.removeFirst());
+        System.out.println(deque1.removeLast());
+        System.out.println(deque1.get(2));
+        System.out.println(deque1.getRecursive(2));
+        System.out.println(deque1.size());
+        deque1.printDeque();
+
+        for(int item : deque1){
+            System.out.println(item);
+        }
+        LinkedListDeque<String> deque2 = new LinkedListDeque<>();
+        deque2.addFirst("Hi");
+        deque2.addLast("Java");
+        deque2.printDeque();
+
+        LinkedListDeque<String> deque3 = new LinkedListDeque<>();
+        deque3.addFirst("Hi");
+        deque3.addLast("Java");
+
+        LinkedListDeque<String> deque4 = new LinkedListDeque<>();
+        deque4.addFirst("hi");
+        deque4.addLast("Java");
+
+        LinkedListDeque<String> deque5 = new LinkedListDeque<>();
+        deque5.addFirst("Hi");
+        deque5.addLast("Java");
+        deque5.addLast("!");
+
+
+        System.out.println(deque2.equals(deque1));
+        System.out.println(deque2.equals(deque2));
+        System.out.println(deque1.equals(deque1));
+        System.out.println(deque2.equals(null));
+        System.out.println(deque2.equals(deque3));
+        System.out.println(deque2.equals(deque4));
+        System.out.println(deque2.equals(deque5));
+
+    }
+}
