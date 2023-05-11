@@ -56,6 +56,35 @@ public class ArrayDequeTest {
         assertTrue("deque2 should be empty after removal", deque4.isEmpty());
     }
 
+    @Test
+    public void test5() {
+        ArrayDeque<Integer> deque5 = new ArrayDeque<>();
+        for (int i = 0; i < 16; i++){
+            deque5.addFirst(i);
+        }
+        deque5.addLast(-1);
+        deque5.addLast(-2);
+        deque5.addLast(-3);
+        deque5.addLast(-4);
+        deque5.addLast(-5);
+        deque5.addLast(-6);
+        deque5.addLast(-7);
+        deque5.addLast(-8);
+        deque5.addLast(-9);
+        deque5.addLast(-10);
+        deque5.removeFirst();
+        deque5.removeLast();
+        deque5.removeFirst();
+        deque5.removeFirst();
+        deque5.removeLast();
+        deque5.removeLast();
+
+        deque5.removeLast();
+        for (int i = 0; i < 16; i++){
+            deque5.removeFirst();
+        }
+
+    }
 
 
 }

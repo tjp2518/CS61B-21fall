@@ -43,11 +43,20 @@ public class ArrayDeque<T> implements Iterable<T> {
 
     /*重新调整数组的大小*/
     public void resize(int capbility){
-
+        T [] a = (T[])new Object[capbility];
+        for(int i = 0; i<size; i++){
+            a[i] = get(i);
+        }
+        items = a;
+        nextFirst = capbility -1;
+        nextLast = size;
     }
 
     /*Adds an item of type T to the front of the deque. You can assume that item is never null.*/
     public void addFirst(T item) {
+        if (size == items.length){
+            resize(size * 2);
+        }
         items[nextFirst] = item;
         nextFirst -= 1;
         if (nextFirst == -1){
@@ -58,6 +67,9 @@ public class ArrayDeque<T> implements Iterable<T> {
 
     /*Adds an item of type T to the back of the deque. You can assume that item is never null.*/
     public void addLast(T item) {
+        if (size == items.length){
+            resize(size * 2);
+        }
         items[nextLast] = item;
         nextLast += 1;
         if(nextLast == items.length){
@@ -93,12 +105,16 @@ public class ArrayDeque<T> implements Iterable<T> {
     /*Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
     public T removeFirst() {
         if (size == 0) {return null;}
+        if (((double)size / items.length) < 0.25){   //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+            resize((int)(items.length/4));
+        }
 
         T returnItem = get(0);
-     /*   if (nextFirst== items.length -1){
+        if (nextFirst== items.length -1){
             nextFirst = -1;
-        }*/
-        items[(nextFirst + 1) % items.length] = null;
+        }
+        items[nextFirst + 1] = null;
+        //items[(nextFirst + 1) % items.length] = null;
         nextFirst += 1;
         size -= 1;
         return returnItem;
@@ -107,6 +123,9 @@ public class ArrayDeque<T> implements Iterable<T> {
     /*Removes and returns the item at the back of the deque. If no such item exists, returns null. */
     public T removeLast() {
         if (size == 0) {return null;}
+        if (((double)size / items.length) < 0.25){  //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+            resize((int)(items.length/4));
+        }
         T returnItem = get(size -1);
         if (nextLast == 0){
             nextLast = items.length; //进行移除的时候，后指针到达左边界的时候，再进行移除时后指针要
