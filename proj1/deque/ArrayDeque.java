@@ -164,7 +164,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         if (o == null){
             return false;
         }
-        if (!(o instanceof LinkedListDeque)){
+        if (!(o instanceof ArrayDeque<?>)){
             return false;
         }
         ArrayDeque<T> temp = (ArrayDeque<T>)o;

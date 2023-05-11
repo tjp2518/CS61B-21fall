@@ -3,6 +3,7 @@ package deque;
 import org.junit.Test;
 import org.junit.Assert.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ArrayDequeTest {
@@ -54,6 +55,41 @@ public class ArrayDequeTest {
             deque4.removeLast();
         }
         assertTrue("deque2 should be empty after removal", deque4.isEmpty());
+    }
+    @Test
+    public void test6(){
+        ArrayDeque<Integer> deque6 = new ArrayDeque<>();
+        ArrayDeque<Integer> deque7 = new ArrayDeque<>();
+        ArrayDeque<String> deque8 = new ArrayDeque<>();
+        ArrayDeque<String> deque9 = new ArrayDeque<>();
+        ArrayDeque<String> deque10 = new ArrayDeque<>();
+
+
+        for (int i = 0; i < 24; i++) {
+            deque6.addFirst(i);
+        }
+        for (int i = 23; i >= 0; i--) {
+            deque7.addLast(i);
+        }
+        for (int i = 0; i < 24; i++) {
+            deque8.addFirst("hi");
+        }
+        for (int i = 23; i >= 0; i--) {
+            deque9.addLast("hi");
+        }
+        for (int i = 0; i < 24; i++) {
+            deque10.addFirst("Hi");
+        }
+        assertTrue("deque6 should be equal deque7", deque6.equals(deque7));
+        assertTrue("deque7 should be equal deque6", deque7.equals(deque6));
+        assertTrue("deque7 should't be equal null", !deque7.equals(null));
+        assertTrue("deque8 should't be equal deque7", !deque8.equals(deque7));
+        assertTrue("deque8 should be equal deque9", deque8.equals(deque9));
+        assertTrue("deque8 should be equal deque9", !deque8.equals(deque10));
+
+
+
+
     }
 
     @Test
