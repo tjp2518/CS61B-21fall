@@ -7,7 +7,7 @@ import java.util.Comparator;
  * or an arbitrary Comparator<T> that is different from the one given in the constructor.*/
 public class MaxArrayDeque<T> extends ArrayDeque<T>{
 
-    Comparator<T> comparator;
+    private Comparator<T> comparator;
 
     //private static class
 

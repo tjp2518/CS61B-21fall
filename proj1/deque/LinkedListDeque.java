@@ -151,7 +151,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /*通过构造辅助函数实现递归的方法*/
-    public T getRecursive(int index, LLNode temp){
+    private T getRecursive(int index, LLNode temp){
         if (index == 0){
             return temp.item;
         }else{
@@ -194,52 +194,4 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         return true;
     }
 
-
-
-    public static void main(String[] args){
-        LinkedListDeque<Integer> deque1 = new LinkedListDeque<>();
-        deque1.addFirst(18);
-        deque1.addFirst(19);
-        deque1.addFirst(20);
-        deque1.addLast(17);
-        deque1.addLast(16);
-        deque1.addLast(15);
-        System.out.println(deque1.removeFirst());
-        System.out.println(deque1.removeLast());
-        System.out.println(deque1.get(2));
-        System.out.println(deque1.getRecursive(2));
-        System.out.println(deque1.size());
-        deque1.printDeque();
-
-        for(int item : deque1){
-            System.out.println(item);
-        }
-        LinkedListDeque<String> deque2 = new LinkedListDeque<>();
-        deque2.addFirst("Hi");
-        deque2.addLast("Java");
-        deque2.printDeque();
-
-        LinkedListDeque<String> deque3 = new LinkedListDeque<>();
-        deque3.addFirst("Hi");
-        deque3.addLast("Java");
-
-        LinkedListDeque<String> deque4 = new LinkedListDeque<>();
-        deque4.addFirst("hi");
-        deque4.addLast("Java");
-
-        LinkedListDeque<String> deque5 = new LinkedListDeque<>();
-        deque5.addFirst("Hi");
-        deque5.addLast("Java");
-        deque5.addLast("!");
-
-
-        System.out.println(deque2.equals(deque1));
-        System.out.println(deque2.equals(deque2));
-        System.out.println(deque1.equals(deque1));
-        System.out.println(deque2.equals(null));
-        System.out.println(deque2.equals(deque3));
-        System.out.println(deque2.equals(deque4));
-        System.out.println(deque2.equals(deque5));
-
-    }
 }
