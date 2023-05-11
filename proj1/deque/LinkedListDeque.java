@@ -10,7 +10,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         private LLNode prev;
         private LLNode next;
 
-        public LLNode(LLNode node1, T i, LLNode node2) {
+        LLNode(LLNode node1, T i, LLNode node2) {
             item = i;
             prev = node1;
             next = node2;
@@ -21,7 +21,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private class LinkListDequeIterator implements Iterator<T> {
 
         int position;
-        public LinkListDequeIterator() {
+        LinkListDequeIterator() {
             position = 0;
         }
         @Override
@@ -95,7 +95,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     @Override
-    /*Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    /*Removes and returns the item at the front of the deque.
+    If no such item exists, returns null.*/
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -110,7 +111,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     @Override
-    /*Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    /*Removes and returns the item at the back of the deque.
+    If no such item exists, returns null. */
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -180,7 +182,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof Deque<?>)) {
             return false;
         }
         LinkedListDeque<T> temp = (LinkedListDeque<T>) o;

@@ -10,7 +10,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private class ArrayDequeIterator implements Iterator<T> {
 
         int position;
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             position = 0;
         }
         @Override
@@ -42,7 +42,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /*重新调整数组的大小*/
-    public void resize(int capbility) {
+    private void resize(int capbility) {
         T[] a = (T[]) new Object[capbility];
         for (int i = 0; i < size; i++) {
             a[i] = get(i);
@@ -100,12 +100,14 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     @Override
-    /*Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    /*Removes and returns the item at the front of the deque.
+     If no such item exists, returns null.*/
     public T removeFirst() {
         if (size == 0) {
             return null;
         }
-        if (((double) size / items.length) < 0.25) {   //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+        //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+        if (((double) size / items.length) < 0.25) {
             resize((int) (items.length / 4));
         }
 
@@ -120,12 +122,14 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return returnItem;
     }
     @Override
-    /*Removes and returns the item at the back of the deque. If no such item exists, returns null. */
+    /*Removes and returns the item at the back of the deque.
+    If no such item exists, returns null. */
     public T removeLast() {
         if (size == 0) {
             return null;
         }
-        if (((double) size / items.length) < 0.25) {  //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+        //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+        if (((double) size / items.length) < 0.25) {
             resize((int) (items.length / 4));
         }
         T returnItem = get(size - 1);
@@ -168,7 +172,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof ArrayDeque<?>)) {
+        if (!(o instanceof Deque<?>)) {
             return false;
         }
         ArrayDeque<T> temp = (ArrayDeque<T>) o;
