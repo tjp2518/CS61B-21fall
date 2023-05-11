@@ -10,7 +10,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private class ArrayDequeIterator implements Iterator<T> {
 
         int position;
-        public ArrayDequeIterator(){
+        public ArrayDequeIterator() {
             position = 0;
         }
         @Override
@@ -35,44 +35,44 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private int size;
 
     public ArrayDeque() {
-        items = (T[])new Object[8];
+        items = (T[]) new Object[8];
         nextFirst = 5;
         nextLast = 6;
         size = 0;
     }
 
     /*重新调整数组的大小*/
-    public void resize(int capbility){
-        T [] a = (T[])new Object[capbility];
-        for(int i = 0; i<size; i++){
+    public void resize(int capbility) {
+        T[] a = (T[]) new Object[capbility];
+        for (int i = 0; i < size; i++) {
             a[i] = get(i);
         }
         items = a;
-        nextFirst = capbility -1;
+        nextFirst = capbility - 1;
         nextLast = size;
     }
     @Override
     /*Adds an item of type T to the front of the deque. You can assume that item is never null.*/
     public void addFirst(T item) {
-        if (size == items.length){
+        if (size == items.length) {
             resize(size * 2);
         }
         items[nextFirst] = item;
         nextFirst -= 1;
-        if (nextFirst == -1){
-            nextFirst = items.length -1;   ////nextFirst超过数组的左边界需要回到末尾（循环）
+        if (nextFirst == -1) {
+            nextFirst = items.length - 1;   ////nextFirst超过数组的左边界需要回到末尾（循环）
         }
         size += 1;
     }
     @Override
     /*Adds an item of type T to the back of the deque. You can assume that item is never null.*/
     public void addLast(T item) {
-        if (size == items.length){
+        if (size == items.length) {
             resize(size * 2);
         }
         items[nextLast] = item;
         nextLast += 1;
-        if(nextLast == items.length){
+        if (nextLast == items.length) {
             nextLast = 0;   //nextLast超过数组的右边界需要回到开头（循环）
         }
 
@@ -93,9 +93,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     /*Prints the items in the deque from first to last, separated by a space.
      Once all the items have been printed, print out a new line.*/
     public void printDeque() {
-
-        for(int i = 0; i < size; i++) {
-
+        for (int i = 0; i < size; i++) {
             System.out.println(get(i).toString() + " ");
         }
         System.out.println();
@@ -104,13 +102,15 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     @Override
     /*Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
     public T removeFirst() {
-        if (size == 0) {return null;}
-        if (((double)size / items.length) < 0.25){   //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
-            resize((int)(items.length/4));
+        if (size == 0) {
+            return null;
+        }
+        if (((double) size / items.length) < 0.25) {   //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+            resize((int) (items.length / 4));
         }
 
         T returnItem = get(0);
-        if (nextFirst== items.length -1){
+        if (nextFirst == items.length - 1) {
             nextFirst = -1;
         }
         items[nextFirst + 1] = null;
@@ -122,15 +122,17 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     @Override
     /*Removes and returns the item at the back of the deque. If no such item exists, returns null. */
     public T removeLast() {
-        if (size == 0) {return null;}
-        if (((double)size / items.length) < 0.25){  //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
-            resize((int)(items.length/4));
+        if (size == 0) {
+            return null;
         }
-        T returnItem = get(size -1);
-        if (nextLast == 0){
+        if (((double) size / items.length) < 0.25) {  //两个整数相除得到的结果仍然是整数，如果您想要得到浮点数结果，需要将其中一个整数强制转换为浮点数类型
+            resize((int) (items.length / 4));
+        }
+        T returnItem = get(size - 1);
+        if (nextLast == 0) {
             nextLast = items.length; //进行移除的时候，后指针到达左边界的时候，再进行移除时后指针要
         }
-        items[nextLast-1] = null;
+        items[nextLast - 1] = null;
         //items[(nextLast - 1) % items.length] = null;  不行java中-1%8的值为-1，而python中为7
         nextLast -= 1;
         size -= 1;
@@ -142,7 +144,9 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     If no such item exists, returns null. Must not alter the deque!*/
     /* must use iteration */
     public T get(int index) {
-        if(index >= size || index<0) {return null;}
+        if (index >= size || index < 0) {
+            return null;
+        }
         return items[(nextFirst + 1 + index) % items.length]; //索引超过数组的右边界需要回到开头（循环）
     }
 
@@ -158,21 +162,21 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     */
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (o == null){
+        if (o == null) {
             return false;
         }
-        if (!(o instanceof ArrayDeque<?>)){
+        if (!(o instanceof ArrayDeque<?>)) {
             return false;
         }
-        ArrayDeque<T> temp = (ArrayDeque<T>)o;
-        if(temp.size() != this.size()){
+        ArrayDeque<T> temp = (ArrayDeque<T>) o;
+        if (temp.size() != this.size()) {
             return false;
         }
-        for(int i=0; i < temp.size(); i++){
-            if (! this.get(i).equals(temp.get(i))){
+        for (int i = 0; i < temp.size(); i++) {
+            if (!this.get(i).equals(temp.get(i))) {
                 return false;
             }
         }
