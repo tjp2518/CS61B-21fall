@@ -168,6 +168,16 @@ public class ArrayDequeTest {
         }
 
     }
+    @Test
+    public void testEqual(){
+        ArrayDeque<Integer> deque1 = new ArrayDeque<>();
+        LinkedListDeque<Integer> deque2 = new LinkedListDeque<>();
+        for (int i = 0; i < 18; i++){
+            deque1.addLast(i);
+            deque2.addLast(i);
+        }
+        assertTrue("deque1 should be deque2", deque1.equals(deque2));
+    }
 
 }
 
