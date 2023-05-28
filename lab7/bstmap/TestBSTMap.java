@@ -87,4 +87,40 @@ public class TestBSTMap {
         assertTrue(b.containsKey("hi"));
     }
 
+    @Test
+    public void printTest() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("d", 1);
+        b.put("b", 1);
+        b.put("c", 1);
+        b.put("f", 1);
+        b.put("e", 1);
+        b.put("g", 1);
+        b.put("a", 1);
+        b.printInOrder();
+    }
+
+    @Test
+    public void findParentTest(){
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("d", 1);
+        b.put("b", 1);
+        b.put("c", 1);
+        b.put("f", 1);
+        b.put("e", 1);
+        b.put("g", 1);
+        b.put("a", 1);
+        b.put("j", 2);
+        System.out.println("移除之前 \n");
+        b.printInOrder();
+
+        System.out.println("移除之后 \n");
+        int aValue = b.remove("j");
+        System.out.println("j的值" + aValue);
+
+        b.printInOrder();
+    }
+
+
+
 }
