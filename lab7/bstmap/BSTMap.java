@@ -335,7 +335,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     // 找到node中具有key的节点的父节点
-    public BSTNode findParent(BSTNode bstNode, K key) {
+    private BSTNode findParent(BSTNode bstNode, K key) {
         if (bstNode.left == null && bstNode.right == null) {
             return null;
         } else if (bstNode.left != null && bstNode.right == null) {
