@@ -113,12 +113,20 @@ public class TestBSTMap {
         b.put("g", 1);
         b.put("a", 1);
         b.put("j", 2);
-        System.out.println("移除之前 \n");
+        System.out.println("移除之前");
         b.printInOrder();
+        System.out.println(b.size());
 
-        System.out.println("移除之后 \n");
-        int aValue = b.remove("j");
-        System.out.println("j的值" + aValue);
+        System.out.println("\n移除g之后");
+        int aValue = b.remove("g", 1);
+        System.out.println("g的值" + aValue);
+        System.out.println(b.size());
+
+        System.out.println("\n移除g,d之后");
+        int aValue1 = b.remove("d",1);
+        System.out.println("d的值" + aValue1);
+        System.out.println(b.size());
+
 
         b.printInOrder();
     }
