@@ -1,7 +1,9 @@
 package bstmap;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
@@ -125,11 +127,22 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return root;
     }
 
-
+    /** Returns a Set view of the keys contained in this map. Not required for Lab 7.
+     * If you don't implement this, throw an UnsupportedOperationException. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
-
+        Set<K> BSTMapKeys = new TreeSet<>();
+        return keySet(node, BSTMapKeys);
+    }
+    private Set<K> keySet(BSTNode bstNode, Set<K> BSTMapKeys) {
+        if (bstNode == null) {
+            return null;
+        } else {
+            keySet(bstNode.left, BSTMapKeys);
+            BSTMapKeys.add(bstNode.key);
+            keySet(bstNode.right, BSTMapKeys);
+        }
+        return BSTMapKeys;
     }
 
     @Override
@@ -150,7 +163,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             returnValue = remove(bstNode.left, key);
         }else {
             returnValue = bstNode.value;
-            BSTNode parentNode = findParent(this.node, bstNode.key);
+            BSTNode parentNode = findParent(this.node, key);
             if (bstNode.left == null && bstNode.right == null) {
 
                 if (bstNode.key.compareTo(parentNode.key) > 0) {
@@ -173,9 +186,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                     parentNode.left = bstNode.right;
                 }
             }else{
-                //BSTNode PrecursorNode = findPrecursor(root);
+
                 BSTNode SuccessorNode = findSuccessor(bstNode);
-                remove(bstNode, SuccessorNode.key, SuccessorNode.value);
+                remove(bstNode, SuccessorNode.key);
                 bstNode.key = SuccessorNode.key;
                 bstNode.value = SuccessorNode.value;
             }
@@ -185,6 +198,35 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         return returnValue;
     }
+/*    private V remove(BSTNode bstNode, K key) {
+        if (bstNode == null) {
+            return null;
+        }
+        V returnValue;
+        int cmp = key.compareTo(bstNode.key);
+        if (cmp > 0) {
+            returnValue = remove(bstNode.right, key);
+        } else if (cmp < 0) {
+            returnValue = remove(bstNode.left, key);
+        }else {
+            returnValue = bstNode.value;
+            BSTNode PrecursorNode = findPrecursor(bstNode);
+            BSTNode SuccessorNode = findSuccessor(bstNode);
+            BSTNode findParent = findParent(node, key);
+            if (PrecursorNode == null && SuccessorNode == null) {
+                findParent = null;
+            } else if(PrecursorNode != null && SuccessorNode == null) {
+                findParent = bstNode.left;
+            } else if(SuccessorNode != null && PrecursorNode == null) {
+                findParent = bstNode.right;
+            } else {
+                remove(bstNode, SuccessorNode.key);
+                bstNode.key = SuccessorNode.key;
+                bstNode.value = SuccessorNode.value;
+            }
+        }
+        return returnValue;
+    }*/
 
     @Override
     public V remove(K key, V value) {
@@ -206,7 +248,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 return null;
             }
             returnValue = bstNode.value;
-            BSTNode parentNode = findParent(this.node, bstNode.key);
+            BSTNode parentNode = findParent(this.node, key);
             if (bstNode.left == null && bstNode.right == null) {
 
                 if (bstNode.key.compareTo(parentNode.key) > 0) {
@@ -275,19 +317,44 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     //找到root的前驱节点
     private BSTNode findPrecursor(BSTNode bstNode){
-        return null;
+        if (bstNode.left == null) {
+            return null;
+        } else {
+            return rightmost(bstNode.left);
+        }
     }
 
-    //找到root的后继节点  调用这个函数root的都是具有两个子节点的，root.right一定不为空。
-    private BSTNode findSuccessor(BSTNode bstNode) {
-            return lastmostNode(bstNode.right);
+    /** 找到以参数bstNode为根节点的节点的最右边的节点 */
+    private BSTNode rightmost(BSTNode bstNode) {
+        if (bstNode.right == null) {
+            return bstNode;
+        } else {
+            return rightmost(bstNode.right);
+        }
     }
+
+
+    //找到root的后继节点  调用这个函数root的都是具有两个子节点的，root.right一定不为空。
+/*    private BSTNode findSuccessor(BSTNode bstNode) {
+            return lastmostNode(bstNode.right);
+    }*/
+
+    /** 返回以bstNode为root的节点的后继节点，如果该节点无子节点，返回null即可*/
+    private BSTNode findSuccessor(BSTNode bstNode) {
+        if (bstNode.right == null) {
+            return null;
+        }else {
+            return leftmostNode(bstNode.right);
+        }
+    }
+
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
-
+        Set<K> keysSet = keySet();
+        return keysSet.iterator();
     }
+
 
     /**prints out your BSTMap in order of increasing Key*/
     public void printInOrder() {
@@ -308,12 +375,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
 
     /**辅助函数，找到root的最左边的节点, 如果root为null 返回null*/
-    private BSTNode lastmostNode(BSTNode bstNode) {
+    private BSTNode leftmostNode(BSTNode bstNode) {
         if (bstNode.left == null) {
             return bstNode;
         }else {
 
-            return lastmostNode(bstNode.left);
+            return leftmostNode(bstNode.left);
         }
     }
 

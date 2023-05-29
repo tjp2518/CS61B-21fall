@@ -3,6 +3,8 @@ package bstmap;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.Set;
+
 /** Tests by Brendan Hu, Spring 2015, revised for 2016 by Josh Hug */
 public class TestBSTMap {
 
@@ -101,7 +103,7 @@ public class TestBSTMap {
     }
 
     @Test
-    public void findParentTest(){
+    public void removeTest(){
         BSTMap<String, Integer> b = new BSTMap<String, Integer>();
         b.put("d", 1);
         b.put("b", 1);
@@ -121,6 +123,44 @@ public class TestBSTMap {
         b.printInOrder();
     }
 
+
+    @Test
+    public void keyMapTest() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("d", 1);
+        b.put("b", 1);
+        b.put("c", 1);
+        b.put("f", 1);
+        b.put("e", 1);
+        b.put("g", 1);
+        b.put("a", 1);
+        b.put("j", 2);
+        Set<String> keysSet  = b.keySet();
+        Object[] arr = keysSet.toArray();
+        for (Object item : arr ) {
+            System.out.print(item);  // 打印abcdefgj
+        }
+
+    }
+
+
+    @Test
+    public void IteratorTest() {
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        b.put("d", 1);
+        b.put("b", 1);
+        b.put("c", 1);
+        b.put("f", 1);
+        b.put("e", 1);
+        b.put("g", 1);
+        b.put("a", 1);
+        b.put("j", 2);
+
+        for (String item : b ) {
+            System.out.print(item);  // 打印abcdefgj
+        }
+
+    }
 
 
 }
