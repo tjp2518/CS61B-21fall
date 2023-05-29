@@ -117,10 +117,10 @@ public class TestBSTMap {
         b.printInOrder();
         System.out.println(b.size());
 
-        System.out.println("\n移除g之后");
+        /*System.out.println("\n移除g之后");
         int aValue = b.remove("g", 1);
         System.out.println("g的值" + aValue);
-        System.out.println(b.size());
+        System.out.println(b.size());*/
 
         System.out.println("\n移除g,d之后");
         int aValue1 = b.remove("d",1);

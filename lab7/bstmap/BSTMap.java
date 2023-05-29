@@ -168,11 +168,108 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     public V remove(K key) {
-        return remove(this.node, key);
+
+        V returnItem = get(key);//node中包含key则返回相应的value，不包含返回的是null
+        node = remove(node, key);
+        return returnItem;
 
     }
 
-    private V remove(BSTNode bstNode, K key) {
+    // ----------------------------------------------------------------remove的简单实现，
+    // 参考https://algs4.cs.princeton.edu/32bst/BST.java.html
+
+    //返回移除key之后的bstNode
+/*    private BSTNode remove(BSTNode bstNode, K key) {
+        if (bstNode == null) {
+            return null;
+        }
+        int cmp = key.compareTo(bstNode.key);
+        if (cmp < 0) {
+            bstNode.left = remove(bstNode.left, key);
+        } else if (cmp > 0){
+            bstNode.right = remove(bstNode.right, key);
+        } else {
+
+            //此时表示bstNode就是我们要移除的节点
+            //bstNode有一个子节点或者无子节点的情况
+           if (bstNode.left == null) {
+               return bstNode.right;
+           }
+           if (bstNode.right == null) {
+               return bstNode.left;
+           }
+
+           //bstNode有两个子节点的情况
+            BSTNode tempNode = bstNode;
+
+           //下面是以后继节点为根节点创建新的树。这样方便修改节点的size
+
+            bstNode = findSuccessor(bstNode);//找到bstNode的右子树的最小节点，作为新树的root
+            //注意这里必须先移除右子树的最小节点，然后在给左子树赋值，两个操作的顺序不能颠倒！！！！
+            bstNode.right = removeMin(tempNode.right); //去掉原右子树的最小节点的右子树作为新树的右子树
+            bstNode.left = tempNode.left;  //原树的左子树作为新树的左子树
+
+        }
+        //在外层
+        bstNode.size = 1 + size(bstNode.left) + size(bstNode.right); //更新新树的size
+        return bstNode;
+    }*/
+
+    private BSTNode remove(BSTNode bstNode, K key) {
+        if (bstNode == null) {
+            return null;
+        }
+        int cmp = key.compareTo(bstNode.key);
+        if (cmp < 0) {
+            bstNode.left = remove(bstNode.left, key);
+        } else if (cmp > 0){
+            bstNode.right = remove(bstNode.right, key);
+        } else {
+
+            //此时表示bstNode就是我们要移除的节点
+            //bstNode有一个子节点或者无子节点的情况
+           if (bstNode.left == null) {
+               return bstNode.right;
+           }
+           if (bstNode.right == null) {
+               return bstNode.left;
+           }
+
+           //bstNode有两个子节点的情况
+            BSTNode suNode ;
+
+            suNode = findSuccessor(bstNode);//找到bstNode的右子树的最小节点，作为新树的root
+            bstNode.right = removeMin(bstNode.right);
+            bstNode.key = suNode.key;
+            bstNode.value = suNode.value;
+        }
+        //在外层
+        bstNode.size = 1 + size(bstNode.left) + size(bstNode.right); //更新新树的size
+        return bstNode;
+    }
+
+    //去除bstNode中最小的节点
+    private BSTNode removeMin(BSTNode bstNode) {
+        if (bstNode.left == null) {
+            return bstNode.right;
+        } else {
+            bstNode.left = removeMin(bstNode.left);
+            bstNode.size = 1 + size(bstNode.left) + size(bstNode.right);
+            return bstNode;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+    /*private V remove(BSTNode bstNode, K key) {
         if (bstNode == null) {
             return null;
         }
@@ -227,7 +324,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
         return returnValue;
     }
-
+*/
     /**
      * 改变从根节点到参数节点bstNode的父节点的路径上的所有节点的size
      */
@@ -240,35 +337,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             changeSize(parentNode);
         }
     }
-    /*    private V remove(BSTNode bstNode, K key) {
-            if (bstNode == null) {
-                return null;
-            }
-            V returnValue;
-            int cmp = key.compareTo(bstNode.key);
-            if (cmp > 0) {
-                returnValue = remove(bstNode.right, key);
-            } else if (cmp < 0) {
-                returnValue = remove(bstNode.left, key);
-            }else {
-                returnValue = bstNode.value;
-                BSTNode PrecursorNode = findPrecursor(bstNode);
-                BSTNode SuccessorNode = findSuccessor(bstNode);
-                BSTNode findParent = findParent(node, key);
-                if (PrecursorNode == null && SuccessorNode == null) {
-                    findParent = null;
-                } else if(PrecursorNode != null && SuccessorNode == null) {
-                    findParent = bstNode.left;
-                } else if(SuccessorNode != null && PrecursorNode == null) {
-                    findParent = bstNode.right;
-                } else {
-                    remove(bstNode, SuccessorNode.key);
-                    bstNode.key = SuccessorNode.key;
-                    bstNode.value = SuccessorNode.value;
-                }
-            }
-            return returnValue;
-        }*/
 
     @Override
     public V remove(K key, V value) {
