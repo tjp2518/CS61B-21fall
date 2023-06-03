@@ -243,7 +243,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        int index = indexBucket(key);
+        V returnValue = get(key);
+        if (returnValue == null) {
+            return null;
+        }
+        for (Node node : buckets[index]) {
+            if (node.key.equals(key)) {
+                buckets[index].remove(node);
+                this.size -= 1;
+                return returnValue;
+            }
+        }
+        return returnValue;
     }
 
     /**
@@ -256,7 +268,21 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        int index = indexBucket(key);
+        V returnValue = get(key);
+        if (returnValue == null || !returnValue.equals(value)) {
+            return null;
+        }
+        for (Node node : buckets[index]) {
+            if (node.key.equals(key) && node.value.equals(value)) {
+                buckets[index].remove(node);
+                this.size -= 1;
+                return returnValue;
+
+            }
+        }
+        return returnValue;
+
     }
 
     /**
