@@ -105,13 +105,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     private Collection<Node>[] createTable(int tableSize) {
         Collection<Node>[] tempBuckets = new Collection[tableSize];
-        for ( int i = 0; i < tempBuckets.length; i++ ) {
+        for (int i = 0; i < tempBuckets.length; i++) {
             tempBuckets[i] = createBucket();
         }
         return tempBuckets;
     }
 
-    // TODO: Implement the methods of the Map61B Interface below
+
     // Your code won't compile until you do so!
 
 
@@ -194,7 +194,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         bucket.add(node);
 
         this.size += 1;
-        if ((double)this.size / buckets.length > loadFactor) {
+        if ((double) this.size / buckets.length > loadFactor) {
             resize(buckets.length * 2);
         }
 
@@ -208,10 +208,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /**
      * 以capacity为buckets数量重调this.buckets的数量*/
-    private void resize (int capacity) {
+    private void resize(int capacity) {
         MyHashMap<K, V> tempMap = new MyHashMap<>(capacity, this.loadFactor);
         for (int i = 0; i < buckets.length; i++) {
-            if ( buckets[i] != null ) {
+            if (buckets[i] != null) {
                 for (Node item : buckets[i]) {
                     tempMap.put(item.key, item.value);
                 }
